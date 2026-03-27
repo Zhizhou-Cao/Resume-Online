@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>曹之洲 Joy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface2: #1f1f1f;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0ede8;
+    --text-muted: rgba(240,237,232,0.45);
+    --accent: #c8b89a;
+    --accent2: #8fb3a0;
+    --tag-bg: rgba(200,184,154,0.12);
+    --radius: 16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── LANG TOGGLE ── */
+  .site-logo {
+    position: fixed; top: 24px; left: 28px; z-index: 1000;
+    display: inline-flex; align-items: center;
+    background: rgba(14,14,14,0.88);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    padding: 10px 18px;
+    backdrop-filter: blur(14px);
+    transition: all 0.2s;
+  }
+  .site-logo:hover { border-color: var(--accent); color: var(--accent); }
+
+  #lang-toggle {
+    position: fixed; top: 24px; right: 28px; z-index: 999;
+    display: flex;
+    background: rgba(14,14,14,0.88);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    backdrop-filter: blur(14px);
+    overflow: hidden;
+  }
+  #lang-toggle button {
+    background: none; border: none;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    padding: 7px 16px; cursor: pointer;
+    transition: all 0.25s; letter-spacing: 0.03em;
+  }
+  #lang-toggle button.active {
+    background: var(--accent); color: #0e0e0e; border-radius: 40px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 24px; left: 50%;
+    transform: translateX(-50%); z-index: 998;
+    display: flex; gap: 4px;
+    background: rgba(14,14,14,0.88);
+    border: 1px solid var(--border);
+    border-radius: 40px; padding: 6px 8px;
+    backdrop-filter: blur(14px);
+  }
+  nav a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; font-weight: 400;
+    padding: 6px 16px; border-radius: 30px;
+    transition: all 0.2s; letter-spacing: 0.02em;
+  }
+  nav a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+  /* ── SHARED ── */
+  section { padding: 110px 0; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 44px; }
+  .section-label {
+    display: inline-block; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+    background: var(--tag-bg); border: 1px solid rgba(200,184,154,0.2);
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 20px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', 'Noto Serif SC', serif;
+    font-size: clamp(34px, 4vw, 50px); line-height: 1.12;
+    letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .divider { width: 40px; height: 2px; background: var(--accent); margin: 24px 0; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 0; position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: ''; position: absolute; top: -200px; right: -80px;
+    width: 750px; height: 750px;
+    background: radial-gradient(circle, rgba(143,179,160,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 44px;
+    display: grid; grid-template-columns: 1fr 400px;
+    gap: 80px; align-items: center; width: 100%;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; color: var(--accent2);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 22px;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-badge::before {
+    content: ''; width: 7px; height: 7px;
+    background: var(--accent2); border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent2); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  h1 {
+    font-family: 'DM Serif Display', 'Noto Serif SC', serif;
+    font-size: clamp(50px, 6vw, 76px); line-height: 1.08;
+    letter-spacing: -0.02em; margin-bottom: 18px;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+  h1 .cn { font-family: 'Noto Serif SC', serif; font-weight: 600; }
+  h1 .en { font-family: 'DM Serif Display', serif; font-style: italic; color: var(--accent); }
+
+  /* ── SKILLS INLINE IN HERO ── */
+  .hero-skills {
+    margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+  .hero-skills-label {
+    font-size: 12px; font-weight: 500; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .skills-chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .skill-chip {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 30px; padding: 7px 14px;
+    font-size: 13px; font-weight: 400; color: var(--text-muted);
+    letter-spacing: 0.01em; transition: all 0.2s;
+  }
+  .skill-chip:hover { border-color: rgba(200,184,154,0.35); color: var(--accent); }
+  .skill-chip.hi { color: var(--accent); border-color: rgba(200,184,154,0.25); background: var(--tag-bg); }
+
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent); color: #0e0e0e;
+    text-decoration: none; font-size: 14px; font-weight: 500;
+    padding: 14px 28px; border-radius: 40px; letter-spacing: 0.02em;
+    transition: all 0.25s; cursor: pointer; border: none;
+    opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+  }
+  .hero-cta:hover { background: #ddd0b8; transform: translateY(-2px); }
+  .hero-cta svg { transition: transform 0.2s; }
+  .hero-cta:hover svg { transform: translateY(3px); }
+
+  .hero-photo { position: relative; opacity: 0; animation: fadeIn 1s 0.4s forwards; }
+  .photo-placeholder {
+    width: 100%; aspect-ratio: 3/4; border-radius: 20px;
+    background: var(--surface2); border: 1px dashed rgba(255,255,255,0.1);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; color: var(--text-muted); font-size: 13px;
+  }
+  .hero-tags {
+    position: absolute; bottom: -16px; left: -20px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .tag {
+    background: rgba(14,14,14,0.9); border: 1px solid var(--border); border-radius: 30px;
+    padding: 8px 16px; font-size: 12px; font-weight: 500;
+    color: var(--text-muted); letter-spacing: 0.04em; white-space: nowrap;
+    backdrop-filter: blur(8px);
+  }
+  .tag.accent { color: var(--accent); border-color: rgba(200,184,154,0.25); }
+
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--text-muted); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; animation: bounce 2.5s infinite;
+    cursor: pointer; text-decoration: none;
+  }
+  @keyframes bounce {
+    0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)}
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ── EDUCATION ── */
+  #education { background: var(--surface); }
+  .edu-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px; margin-top: 8px;
+  }
+  .edu-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 30px;
+    transition: border-color 0.25s;
+  }
+  .edu-card:hover { border-color: rgba(200,184,154,0.25); }
+  .edu-year {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent2); margin-bottom: 14px;
+  }
+  .edu-school {
+    font-family: 'DM Serif Display', 'Noto Serif SC', serif;
+    font-size: 22px; margin-bottom: 6px; line-height: 1.2;
+  }
+  .edu-degree {
+    font-size: 14px; color: var(--accent); font-weight: 500; margin-bottom: 14px;
+  }
+  .edu-detail {
+    font-size: 13px; color: var(--text-muted); line-height: 1.75;
+  }
+  .edu-detail [data-lang] > span { display: block; }
+  .edu-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .edu-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
+    color: var(--text-muted); background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px;
+  }
+
+  /* ── PROJECTS ── */
+  #projects {}
+  .projects-header { margin-bottom: 52px; }
+  .projects-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .project-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; cursor: pointer; transition: all 0.3s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .project-card:hover { border-color: rgba(200,184,154,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .project-thumb {
+    aspect-ratio: 16/9; background: var(--surface2);
+    position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .project-thumb img { width:100%;height:100%;object-fit:cover;transition:transform 0.5s; }
+  .project-card:hover .project-thumb img { transform:scale(1.05); }
+  .thumb-placeholder { width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;flex-direction:column;gap:8px; }
+  .project-body { padding: 22px 24px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .ptag {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--accent2); background: rgba(143,179,160,0.1); border: 1px solid rgba(143,179,160,0.2);
+    padding: 3px 9px; border-radius: 20px;
+  }
+  .project-title {
+    font-family: 'DM Serif Display', serif; font-size: 19px; line-height: 1.2; margin-bottom: 9px;
+  }
+  .project-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .project-arrow {
+    margin-top: 18px; display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 500; color: var(--accent);
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .project-arrow svg { transition: transform 0.2s; }
+  .project-card:hover .project-arrow svg { transform: translate(3px,-3px); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--surface); }
+  .contact-inner { text-align: center; max-width: 560px; margin: 0 auto; }
+  .contact-inner h2 { margin-bottom: 18px; }
+  .contact-inner p { font-size: 16px; color: var(--text-muted); margin-bottom: 36px; line-height: 1.75; }
+  .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    padding: 12px 22px; border-radius: 40px; transition: all 0.2s; letter-spacing: 0.02em;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); }
+  .contact-link.primary { background: var(--accent); color: #0e0e0e; border-color: transparent; }
+  .contact-link.primary:hover { background: #ddd0b8; transform: translateY(-2px); }
+  .copy-toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(12px);
+    background: rgba(20,20,20,0.92); color: #f5f2ea; border: 1px solid var(--border);
+    padding: 10px 14px; border-radius: 999px; font-size: 13px; z-index: 1200;
+    opacity: 0; pointer-events: none; transition: all 0.22s ease;
+  }
+  .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 28px 0;
+    text-align: center; color: var(--text-muted); font-size: 12px; letter-spacing: 0.04em;
+  }
+
+  /* ── DETAIL PAGE ── */
+  #detail-page {
+    display: none; position: fixed; inset: 0;
+    background: var(--bg); z-index: 990; overflow-y: auto;
+  }
+  #detail-page.open { display: block; animation: slideIn 0.35s ease; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .detail-back {
+    position: fixed; top: 50%; left: 28px; z-index: 995;
+    transform: translateY(-50%);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(14,14,14,0.88); border: 1px solid var(--border); border-radius: 40px;
+    padding: 8px 18px 8px 12px; color: var(--text); font-size: 13px; font-weight: 500;
+    cursor: pointer; backdrop-filter: blur(14px); transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .detail-back:hover { border-color: var(--accent); color: var(--accent); }
+  .detail-hero {
+    width: 100%; height: 52vh; min-height: 360px;
+    background: var(--surface2); position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .detail-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(14,14,14,0.1) 30%, rgba(14,14,14,0.97)); }
+  .detail-hero-content { position: absolute; bottom: 48px; left: 0; right: 0; max-width: 860px; margin: 0 auto; padding: 0 40px; }
+  .detail-hero-content h1 { font-size: clamp(34px,5vw,58px); opacity:1; animation:none; margin-bottom:10px; }
+  .detail-content { max-width: 860px; margin: 0 auto; padding: 56px 40px 100px; }
+  .project-detail-content { display: none; }
+  .project-detail-content.active { display: block; }
+  .detail-section { margin-bottom: 56px; }
+  .detail-section h3 { font-family: 'DM Serif Display', serif; font-size: 24px; margin-bottom: 18px; color: var(--accent); }
+  .detail-section p { font-size: 15px; color: var(--text-muted); line-height: 1.85; margin-bottom: 14px; }
+  .detail-media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; margin-bottom: 36px; }
+  .media-block {
+    border-radius: 12px; background: var(--surface2); border: 1px solid var(--border);
+    aspect-ratio: 9/16; display: flex; align-items: center; justify-content: center;
+    width: 72%; max-width: 240px; margin: 0 auto;
+    color: var(--text-muted); font-size: 12px; flex-direction: column; gap: 8px;
+    transition: border-color 0.2s; overflow: hidden;
+  }
+  .media-block img { width:100%;height:100%;object-fit:contain;display:block;background:#111; }
+  .media-block:hover { border-color: rgba(200,184,154,0.3); }
+  .video-area {
+    margin-top: 18px; border: 1.5px dashed var(--border); border-radius: 12px;
+    padding: 36px; text-align: center; color: var(--text-muted); font-size: 13px;
+    line-height: 1.7;
+  }
+  /* YouTube / iframe embed */
+  .video-area iframe { width:100%; aspect-ratio:16/9; border:none; border-radius:8px; display:block; }
+
+  /* ── LANG SYSTEM ── */
+  [data-lang] { display: none; }
+  body.zh [data-lang="zh"] { display: block; }
+  body.en [data-lang="en"] { display: block; }
+  body.zh [data-inline-lang="zh"] { display: inline; }
+  body.zh [data-inline-lang="en"] { display: none; }
+  body.en [data-inline-lang="en"] { display: inline; }
+  body.en [data-inline-lang="zh"] { display: none; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    .hero-inner{grid-template-columns:1fr;gap:44px}
+    .hero-photo{order:-1;max-width:300px;margin:0 auto}
+    .hero-tags{left:auto;right:-10px;bottom:-10px}
+    .projects-grid{grid-template-columns:1fr 1fr}
+    nav{display:none}
+    .detail-media-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    section{padding:80px 0}
+    .container,.hero-inner{padding:0 20px}
+    .projects-grid{grid-template-columns:1fr}
+    h1{font-size:42px}
+    .detail-content,.detail-hero-content{padding-left:20px;padding-right:20px}
+  }
+</style>
+</head>
+<body class="zh">
+
+<a href="#hero" class="site-logo" onclick="goHome(event)">Czz's Resume</a>
+
+<!-- Language toggle -->
+<div id="lang-toggle">
+  <button onclick="setLang('zh')" id="btn-zh" class="active">中文</button>
+  <button onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="#education"><span data-inline-lang="zh">教育</span><span data-inline-lang="en">Education</span></a>
+  <a href="#projects"><span data-inline-lang="zh">项目</span><span data-inline-lang="en">Projects</span></a>
+  <a href="#contact"><span data-inline-lang="zh">联系</span><span data-inline-lang="en">Contact</span></a>
+</nav>
+
+<!-- ══════════════════ MAIN PAGE ══════════════════ -->
+<div id="main-page">
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span data-inline-lang="zh">正在寻找机会...</span>
+          <span data-inline-lang="en">Open to job opportunities...</span>
+        </div>
+        <h1>
+          <span data-inline-lang="zh"><br>曹之洲</span>
+          <span data-inline-lang="en"><br>Zhizhou Cao</span>
+          <span class="en"><br>Joy</span>
+        </h1>
+
+        <!-- Skills inline -->
+        <div class="hero-skills">
+          <div class="hero-skills-label">
+            <span data-inline-lang="zh">我的核心能力</span>
+            <span data-inline-lang="en">Core Skills</span>
+          </div>
+          <div class="skills-chips">
+            <!-- ⬇️ 改成你自己的技能 -->
+            <span class="skill-chip hi">
+              <span data-inline-lang="zh">数据分析</span>
+              <span data-inline-lang="en">Data Analysis</span>
+            </span>
+            <span class="skill-chip hi">
+              <span data-inline-lang="zh">Vibe Coding</span>
+              <span data-inline-lang="en">Vibe Coding</span>
+            </span>
+            <span class="skill-chip">Prompt Engineering</span>
+            <span class="skill-chip">
+              <span data-inline-lang="zh">需求文档 PRD</span>
+              <span data-inline-lang="en">PRD Writing</span>
+            </span>
+            <span class="skill-chip">
+              <span data-inline-lang="zh">机器学习</span>
+              <span data-inline-lang="en">Machine Learning</span>
+            </span>
+            <span class="skill-chip">
+              <span data-inline-lang="zh">奇思妙想</span>
+              <span data-inline-lang="en">Creative Thinking</span>
+            </span>
+            <span class="skill-chip">Dify</span>
+            <span class="skill-chip">Python</span>
+            <span class="skill-chip">SQL</span>
+          </div>
+        </div>
+
+        <!-- CTA button — onclick scroll to projects -->
+        <button class="hero-cta" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+          <span data-inline-lang="zh">查看我的项目</span>
+          <span data-inline-lang="en">View my projects</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 2v10M2 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="hero-photo">
+        <!-- ⬇️ 把图片放在同目录，取消下一行注释并改文件名 -->
+        <img src="./selfie.jpg" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:20px;border:1px solid var(--border);display:block;">
+        <div class="hero-tags">
+          <span class="tag accent">
+            <span data-inline-lang="zh">求职中</span>
+            <span data-inline-lang="en">Job Seeking</span>
+          </span>
+          <span class="tag">🌍 <span data-inline-lang="zh">广东</span><span data-inline-lang="en">Guangdong</span></span>
+        </div>
+      </div>
+    </div>
+
+    <a class="scroll-hint" href="#education">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <span data-inline-lang="zh">向下滑动</span>
+      <span data-inline-lang="en">scroll</span>
+    </a>
+  </section>
+
+  <!-- ── EDUCATION ── -->
+  <section id="education">
+    <div class="container">
+      <span class="section-label">
+        <span data-inline-lang="zh">教育经历</span>
+        <span data-inline-lang="en">Education</span>
+      </span>
+      <h2>
+        <span data-inline-lang="zh">学历背景</span>
+        <span data-inline-lang="en">Academic Background</span>
+      </h2>
+      <div class="divider"></div>
+      <div class="edu-grid">
+
+        <!-- 学校 1 — 替换为你的信息 -->
+        <div class="edu-card">
+          <div class="edu-year">2025.8 — 2027.1</div>
+          <div class="edu-school">
+            <span data-inline-lang="zh">🇸🇬 新加坡国立大学</span>
+            <span data-inline-lang="en">🇸🇬 National University of Singapore</span>
+          </div>
+          <div class="edu-degree">
+            <span data-inline-lang="zh">硕士 · 数据科学与机器学习</span>
+            <span data-inline-lang="en">Master's · Data Science and Machine Learning</span>
+          </div>
+          <div class="edu-detail">
+            <span data-inline-lang="zh">
+              <span><br>GPA：4.3 / 5.0</span>
+              <span><br>主修课程：机器学习，深度学习，大数据分析</span>
+              <span><br>研究生数学学院学生大使</span>
+            </span>
+            <span data-inline-lang="en">
+              <span>GPA: 4.3 / 5.0</span>
+              <span><br>Coursework: Machine Learning, Deep Learning, Big Data Analysis</span>
+              <span><br>Student Ambassador of the Graduate School of Mathematics</span>
+            </span>
+          </div>
+          <div class="edu-tags">
+            <span class="edu-tag">Python</span>
+            <span class="edu-tag">SQL</span>
+            <span class="edu-tag">Dify</span>
+            <span class="edu-tag">MongoDB</span>
+          </div>
+        </div>
+
+        <!-- 交换/项目经历（可选，删掉也没关系） -->
+        <div class="edu-card">
+          <div class="edu-year">2021.9 — 2025.6</div>
+          <div class="edu-school">
+            <span data-inline-lang="zh">🇬🇧 爱丁堡大学</span>
+            <span data-inline-lang="en">🇬🇧 University of Edinburgh</span>
+          </div>
+          <div class="edu-degree">
+            <span data-inline-lang="zh">学士 · 数学与统计学</span>
+            <span data-inline-lang="en">Bachelor's · Mathematics and Statistics</span>
+          </div>
+          <div class="edu-detail">
+            <span data-inline-lang="zh">
+              <span><br>荣誉学士学位</span>
+              <span><br>主修课程：统计方法论、计算数学、应用统计学、数据科学设计与抽样</span>
+              <span><br>奖项：爱丁堡奖，美国统计协会(ASA)数据竞赛最佳数据可视化奖</span>
+            </span>
+            <span data-inline-lang="en">
+              <span><br>Honors Bachelor's Degree</span>
+              <span><br>Coursework: Statistical Methodology, Computational Mathematics, Applied Statistics, Data Science Design and Sampling</span>
+              <span><br>Awards: Edinburgh Award, ASA Data Visualization Competition Best Data Visualization Award</span>
+            </span>
+          </div>
+          <div class="edu-tags">
+            <span class="edu-tag">Python</span>
+            <span class="edu-tag">R</span>
+            <span class="edu-tag">Tableau</span>
+          </div>
+        </div>
+    </section>      
+
+  <!-- ── PROJECTS ── -->
+  <section id="projects">
+    <div class="container">
+      <div class="projects-header">
+        <span class="section-label">
+          <span data-inline-lang="zh">精选项目</span>
+          <span data-inline-lang="en">Projects</span>
+        </span>
+        <h2>
+          <span data-inline-lang="zh">我做过的</span>
+          <span data-inline-lang="en">What I've built</span>
+        </h2>
+      </div>
+      <div class="projects-grid">
+
+        <!-- Project 1 -->
+        <a class="project-card" onclick="openProject('p1');return false;" href="#">
+          <div class="project-thumb">
+            <img src="p1-cover.jpg" alt="">
+            <!-- <div class="thumb-placeholder">
+              <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M3 18l6-5 5 4 4-6 7 9" stroke="currentColor" stroke-width="1.2"/></svg>
+              <span data-inline-lang="zh">项目封面图</span><span data-inline-lang="en">Cover image</span>
+            </div> -->
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag"><span data-inline-lang="zh">AI 产品</span><span data-inline-lang="en">AI Product</span></span>
+              <span class="ptag"><span data-inline-lang="zh">大模型</span><span data-inline-lang="en">LLM</span></span>
+              <span class="ptag"><span data-inline-lang="zh">0→1</span><span data-inline-lang="en">0→1</span></span>
+            </div>
+            <div class="project-title"><span data-inline-lang="zh">多模态AI 智能生活助手</span><span data-inline-lang="en">Multimodal AI Assistant for Daily Lie</span></div>
+            <div class="project-desc"><span data-inline-lang="zh">针对日常餐饮的真实痛点，自主设计并开发了一款集成多模态视觉识别的AI推荐应用。</span><span data-inline-lang="en">Designed and developed an AI recommendation application integrating multi-modal visual recognition to address real-world pain points in daily dining.</span></div>
+            <div class="project-arrow"><span data-inline-lang="zh">查看详情</span><span data-inline-lang="en">View case study</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 2 -->
+        <a class="project-card" onclick="openProject('p2');return false;" href="#">
+          <div class="project-thumb">
+            <!-- <div class="thumb-placeholder">
+              <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M3 18l6-5 5 4 4-6 7 9" stroke="currentColor" stroke-width="1.2"/></svg>
+              <span data-inline-lang="zh">项目封面图</span><span data-inline-lang="en">Cover image</span>
+            </div> -->
+            <img src="./df-edi-logo.png" alt="">
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag"><span data-inline-lang="zh">统计建模</span><span data-inline-lang="en">Statistical Modelling</span></span>
+              <span class="ptag"><span data-inline-lang="zh">商业分析</span><span data-inline-lang="en">Business Analysis</span></span>
+              <span class="ptag"><span data-inline-lang="zh">数据可视化</span><span data-inline-lang="en">Data Visualization</span></span>
+            </div>
+            <div class="project-title"><span data-inline-lang="zh">美国统计协会 数据分析竞赛</span><span data-inline-lang="en">ASA DataFest Competition</span></div>
+            <div class="project-desc"><span data-inline-lang="zh">荣获最佳数据可视化奖。通过统计分析在线教育业务，将数据洞察与产品优化相结合。</span><span data-inline-lang="en"> Won the best data visualization award. Diagnose the online education business, and combined data insights with product optimization.</span></div>
+            <div class="project-arrow"><span data-inline-lang="zh">查看详情</span><span data-inline-lang="en">View case study</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Project 3 -->
+        <a class="project-card" onclick="openProject('p3');return false;" href="#">
+          <div class="project-thumb">
+            <!-- <div class="thumb-placeholder">
+              <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M3 18l6-5 5 4 4-6 7 9" stroke="currentColor" stroke-width="1.2"/></svg>
+              <span data-inline-lang="zh">项目封面图</span><span data-inline-lang="en">Cover image</span>
+            </div> -->
+            <img src="./p3-cover.jpg" alt="">
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="ptag"><span data-inline-lang="zh">机器学习</span><span data-inline-lang="en">Machine Learning</span></span>
+              <span class="ptag"><span data-inline-lang="zh">数据建模</span><span data-inline-lang="en">Data Modelling</span></span>
+              <span class="ptag"><span data-inline-lang="zh">团队协作</span><span data-inline-lang="en">Team Collaboration</span></span>
+            </div>
+            <div class="project-title"><span data-inline-lang="zh">网络安全日志异常检测</span><span data-inline-lang="en">Cybersecurity Log Anomaly Detection</span></div>
+            <div class="project-desc"><span data-inline-lang="zh">处理 25 万条高维、类别极度不平衡、混合类型日志数据的单类异常检测问题。</span><span data-inline-lang="en">Processed 250,000 high-dimensional, highly unbalanced, mixed-type log data for single-class anomaly detection.</span></div>
+            <div class="project-arrow"><span data-inline-lang="zh">查看详情</span><span data-inline-lang="en">View case study</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <span class="section-label"><span data-inline-lang="zh">联系</span><span data-inline-lang="en">Get in touch</span></span>
+        <h2><span data-inline-lang="zh">期待与你沟通</span><span data-inline-lang="en">Let's connect</span></h2>
+        <p>
+          <span data-lang="zh">正在寻找AI产品方向的机会，欢迎聊聊～</span>
+          <span data-lang="en">Looking for AI PM internship opportunities. Feel free to reach out!</span>
+        </p>
+        <div class="contact-links">
+          <a href="#" id="copy-email-btn" class="contact-link primary">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 4l6 4.5L13 4" stroke="currentColor" stroke-width="1.2"/></svg>
+            cao_zhizhou@163.com
+          </a>
+          <!-- <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/yourusername" class="contact-link" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub
+          </a> -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-inline-lang="zh">© 2026 Joy Cao</span>
+    <span data-inline-lang="en">© 2026 Joy Cao</span>
+  </footer>
+  <div id="copy-toast" class="copy-toast">邮箱已复制</div>
+
+</div><!-- end main-page -->
+
+<!-- ══════════════════ PROJECT DETAIL PAGE ══════════════════ -->
+<div id="detail-page">
+  <button class="detail-back" onclick="closeProject()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M2 7l5-5M2 7l5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    <span data-inline-lang="zh">返回</span><span data-inline-lang="en">Back</span>
+  </button>
+
+  <div class="detail-hero">
+    <img id="detail-cover-image" src="p1-cover.jpg" alt="">
+    <!-- <div id="detail-cover-placeholder" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface2);color:var(--text-muted);flex-direction:column;gap:8px;font-size:13px;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="28" height="28" rx="5" stroke="currentColor" stroke-width="1.2"/><path d="M2 22l8-7 7 6 5-8 8 11" stroke="currentColor" stroke-width="1.2"/></svg>
+      <span data-inline-lang="zh">项目封面图</span><span data-inline-lang="en">Project cover</span>
+    </div> -->
+    <!-- cover image injected here via JS if available -->
+    <div class="detail-hero-overlay"></div>
+    <div class="detail-hero-content">
+      <div class="project-tags" id="detail-tags"></div>
+      <h1 id="detail-title"></h1>
+      <div id="detail-meta" style="font-size:13px;color:var(--text-muted);margin-top:4px;"></div>
+    </div>
+  </div>
+
+  <div class="detail-content">
+    <div class="project-detail-content active" id="detail-content-p1">
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">项目背景</span><span data-inline-lang="en">Overview</span></h3>
+        <div data-lang="zh">
+          <p>多人聚餐时，组织者需要在点菜前逐一确认每个人的饮食禁忌和口味偏好，过程繁琐且容易遗漏。现有的大众点评、美团等工具只解决"去哪吃"的问题，没有解决"这道菜我能不能吃、合不合适"的问题。主要对于经常组织多人聚餐的人，尤其是聚餐发起者。他们的核心诉求是在不熟悉菜单的陌生餐厅，快速筛选出所有人都能吃、且符合各自口味的菜品。</p>
+          <p>解决方案的核心逻辑是把"人的偏好"和"菜单信息"两个数据源交给 AI 做匹配，输出兼顾所有人需求的推荐结果。</p>
+        </div>
+        <div data-lang="en">
+          <p>When organizing group meals, organizers need to confirm each person's dietary restrictions and taste preferences one by one before ordering, which is time-consuming. Existing tools like Dineout and Meituan only solve the problem of "where to eat," not "whether I can eat this dish and whether it suits me."</p>
+          <p>The main users are people who often organize group meals, especially the initiators. Their core requirement is to quickly filter out dishes that everyone can eat and match everyone's preferences in unfamiliar restaurants without knowing the menu. The core solution is to match two data sources: personal preferences and menu information, then output recommendations that cover the needs of the whole group.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">技术架构</span><span data-inline-lang="en">Tech Framework</span></h3>
+        <div data-lang="zh">
+          <p>前端：使用 React Native + Expo 开发，一套代码同时支持 iOS 手机端和网页端。路由使用 Expo Router 的文件路由系统，本地数据存储使用 AsyncStorage，图片选择使用 expo-image-picker。</p>
+          <p>AI 后端：使用 Dify 平台搭建工作流，不是直接调用大模型 API，而是通过可视化工作流编排实现完整的推理链路。工作流内部分两个 LLM 节点：第一个节点使用通义千问VL（视觉语言模型）识别菜单图片，提取所有菜品名称列表；第二个节点使用 GPT-4o-mini 接收菜品列表和所有人的偏好信息，进行匹配分析并生成结构化的推荐结果。</p>
+          <p>数据流向：App 本地 → 读取本人偏好和已选好友的完整偏好信息 → 拼接成结构化文字 → 连同菜单图片一起发送给 Dify API → Dify 工作流处理 → 返回 Markdown 格式的推荐结果 → App 渲染展示。</p>
+        </div>
+        <div data-lang="en">
+          <p>Frontend: Developed with React Native + Expo, supporting both iOS mobile and web platforms with a single codebase. The routing system uses Expo Router, local data storage uses AsyncStorage, and image selection uses expo-image-picker.</p>
+          <p>AI backend: Built on the Dify platform through a visual workflow instead of directly calling a single LLM endpoint. The workflow includes two model nodes: the first uses Tongyi Qianwen VL to recognize menu images and extract dish names; the second uses GPT-4o-mini to match dish options with group preferences and generate structured recommendations.</p>
+          <p>Data flow: App local storage -> read self and selected friends' preferences -> build structured prompt text -> send with menu image to Dify API -> Dify workflow processing -> return Markdown recommendations -> render in app.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">产品架构</span><span data-inline-lang="en">Product Framework</span></h3>
+        <div data-lang="zh">
+          <p>模块一：我的偏好。用户第一次进入 App 时设置自己的固定偏好，数据保存在本地，之后每次点餐自动带入，不需要重复填写。收集的信息包括：口味偏好（清淡/微辣/中辣/重辣）、饮食类型（无限制/素食/清真/低卡减脂）、过敏食材（海鲜/花生/坚果/乳制品）、不喜欢的食材（文字输入）、其他备注（文字输入）。</p>
+          <p>模块二：点餐。核心功能分两个入口：其一是「我要去餐厅吃」，流程为上传菜单图片、选择用餐人数与同桌偏好、点击开始推荐并查看分级结果；其二是「不知道吃什么」，在选择人数与同桌偏好后进入卡片滑动推荐页，支持收藏和管理候选菜品。</p>
+          <p>模块三：好友档案。支持添加、编辑、删除常用好友的饮食偏好，结构与本人偏好一致，点餐时可直接勾选调用，避免重复输入。</p>
+        </div>
+        <div data-lang="en">
+          <p>Module 1: Personal preference profile. Users set persistent preferences on first use, including taste level, diet type, allergens, disliked ingredients, and notes. These are saved locally and reused automatically.</p>
+          <p>Module 2: Ordering flow. The core feature has two entries: "I am going to a restaurant" (upload menu, select diners, run recommendation) and "I don't know what to eat" (swipe-based recommendations filtered by constraints, with favorites management).</p>
+          <p>Module 3: Friend profiles. Users can add, edit, and delete common dining partners' preferences and directly select them during recommendation, reducing repeated input.</p>
+        </div>
+
+        <div class="detail-media-grid">
+          <div class="media-block"><img src="./random.jpg" alt=""></div>
+          <div class="media-block"><img src="./result.jpg" alt=""></div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">视频演示</span><span data-inline-lang="en">Video Demo</span></h3>
+        <div class="video-area">
+          <video controls style="width:30%;max-width:560px;border-radius:8px;display:block;margin:0 auto;">
+            <source src="./dining_video.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">局限与未来</span><span data-inline-lang="en">Limitations & Future</span></h3>
+        <div data-lang="zh">
+          <p><strong>当前局限：</strong>菜单识别依赖图片清晰度，模糊或光线不好的图片识别准确率会下降。本地菜品数据库是手动维护的静态文件，覆盖有限。随机推荐模块未接入 AI，仅做禁忌过滤。用户数据保存在本地，换设备会丢失。</p>
+          <p><strong>近期可迭代方向：</strong>接入地图/点评类开放 API，实现周边餐厅推荐并自动获取菜单；扩充本地菜品数据库；让随机推荐也接入 AI 做口味匹配，而不只做禁忌过滤。</p>
+          <p><strong>长期方向：</strong>支持好友偏好档案共享与自动同步，增加历史点餐记录，持续优化个人偏好模型。</p>
+        </div>
+        <div data-lang="en">
+          <p><strong>Current limitations:</strong> Menu recognition quality depends on image clarity. The local dish database is manually maintained and limited in coverage. The random recommendation flow does not use AI matching yet and only filters hard constraints. User data is local-only and is not synced across devices.</p>
+          <p><strong>Near-term iterations:</strong> Integrate map/review platform APIs for nearby restaurant discovery and auto menu acquisition, expand dish coverage, and add AI preference matching to the random recommendation path.</p>
+          <p><strong>Long-term direction:</strong> Enable shared friend preference profiles with auto-sync, add historical ordering records, and continuously refine personalization models.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-detail-content" id="detail-content-p2">
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">项目概述</span><span data-inline-lang="en">Project Overview</span></h3>
+        <div data-lang="zh">
+          <p>这是我们参加数据分析竞赛的核心项目，合作方为在线统计学习平台 CourseKata。项目聚焦在线教育平台的关键命题：如何评估教学资源的真实有效性，并将数据洞察转化为可执行的产品优化动作。</p>
+          <p>我担任四人团队负责主导选题、分析路线和成果汇报。我们的研究问题是：教学视频是否能显著提升学生章节测验成绩。最终我们在 20 支队伍中获得“最佳可视化奖”，并向合作方提交了可落地的改进建议。</p>
+        </div>
+        <div data-lang="en">
+          <p>This project was completed in a data analytics competition with CourseKata, an online statistics learning platform. We focused on a core EdTech question: how to evaluate the real effectiveness of learning resources and turn insights into product decisions.</p>
+          <p>As Team Lead of a four-person team, I led scoping, analysis design, and final delivery. Our key question was whether instructional videos significantly improve chapter quiz performance. We won the Best Visualization Award among 20 teams and delivered actionable recommendations to CourseKata.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">技术架构与分析方法</span><span data-inline-lang="en">Technical Approach</span></h3>
+        <div data-lang="zh">
+          <p><strong>1) 数据探索与预处理：</strong>样本覆盖 1 万+ 学生学习记录。我先完成 EDA、缺失处理与变量定义，将“观看视频”严格定义为“视频完成度超过 80%”，并按章节规整学习行为。</p>
+          <p><strong>2) 核心统计建模：</strong>最大挑战是选择偏见（主动学生更可能看视频且成绩更高）。</p>
+          <p>为剥离混淆因素，我们使用多元线性回归：</p>
+          <p>- 因变量：章节测验成绩<br>- 核心自变量：是否观看视频（1/0）<br>- 控制变量：上一章节成绩、章节学习总时长、人口统计信息（如年级）、等等</p>
+          <p>结果显示核心变量 p 值显著大于 0.05，无法拒绝“视频观看对成绩无显著影响”的原假设。即在现有模式下，视频对成绩提升没有可测量的显著作用。</p>
+        </div>
+        <div data-lang="en">
+          <p><strong>1) EDA and Pre-processing:</strong> We analyzed learning histories from 10,000+ students, cleaned missing values, and normalized records by chapter. “Video watched” was defined as completion rate above 80%.</p>
+          <p><strong>2) Statistical Modeling:</strong> To address selection bias, we used multiple linear regression with quiz score as dependent variable, video-watching status as the key independent variable, and controls including prior chapter score, total study time, and demographics.</p>
+          <p>The video coefficient was not significant (p &gt; 0.05), indicating no measurable score lift from videos under the current product setup.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">可视化洞察与关键发现</span><span data-inline-lang="en">Visual Insights & Findings</span></h3>
+        <div data-lang="zh">
+          <p>“视频无显著增益”这一零假设（H0 Null Hypothesis）的被拒绝，让我们将重点从“证明价值”转向“诊断原因”。基于可视化分析，我们验证了三点：</p>
+          <p><strong>假设一：观看方式问题。</strong>大量学生呈现“任务驱动式拖拽”，只在卡题时快速定位答案片段，而非线性学习。</p>
+          <p><strong>假设二：内容时长问题。</strong>超过 10 分钟的视频完成率明显下降，观看兴趣随时长增加断崖式下跌。</p>
+          <p><strong>假设三：人群异质性。</strong>视频对基础较弱学生有微弱正向作用，但对中等及以上学生几乎无效果。</p>
+        </div>
+        <div data-lang="en">
+          <p>The null result shifted our focus from value validation to root-cause diagnosis. Visual analysis supported three hypotheses:</p>
+          <p><strong>H1: Viewing behavior issue.</strong> Many learners used videos in a task-driven, seek-and-skip pattern rather than systematic learning.</p>
+          <p><strong>H2: Content length issue.</strong> Completion rates dropped sharply for videos longer than 10 minutes.</p>
+          <p><strong>H3: Segment heterogeneity.</strong> Videos showed weak positive effects for low-performing students, but little impact for mid/high performers.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">项目成果与展望</span><span data-inline-lang="en">Outcome & Future</span></h3>
+        <div data-lang="zh">
+          <p>尽管结论出乎预料，但成果被认为具备战略价值：我们挑战了核心假设，帮助平台避免资源错配风险。很多时候，“发现什么无效”比“发现什么有效”更有决策价值。</p>
+          <p><strong>三个可执行建议：</strong><br>1) 从“鼓励观看”转向“优化学习体验”<br>2) 推行 3-5 分钟聚焦单知识点的“微课视频”<br>3) 在关键节点内嵌互动问答，推动被动观看转为主动学习</p>
+          <p><strong>展望：</strong>本次观察性研究已完成“问题诊断”，下一步应通过 A/B 测试验证“互动式微视频”是否能显著提升学习成绩。</p>
+        </div>
+        <div data-lang="en">
+          <p>Although the result was out of expectation, it was strategically valuable: we challenged a core assumption and reduced the risk of resource misallocation.</p>
+          <p><strong>Actionable recommendations:</strong> (1) shift from “increasing views” to “improving learning experience,” (2) redesign long videos into 3-5 minute micro-lessons, and (3) add in-video interactive checkpoints to convert passive watching into active learning.</p>
+          <p><strong>Future:</strong> This observational study diagnosed the problem well; the next step is rigorous A/B testing to validate whether interactive micro-videos can produce measurable score improvements.</p>
+        </div>
+      </div>
+      <!-- <div class="detail-section">
+        <h3><span data-inline-lang="zh">关键产出</span><span data-inline-lang="en">Key Deliverables</span></h3>
+        <div class="detail-media-grid">
+          <div class="media-block"><img src="./p2-1.jpg" alt=""></div>
+          <div class="media-block"><img src="./p2-2.jpg" alt=""></div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">演示内容</span><span data-inline-lang="en">Demo</span></h3>
+        <div class="video-area">
+          <video controls style="width:30%;max-width:560px;border-radius:8px;display:block;margin:0 auto;">
+            <source src="./p2-demo.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="project-detail-content" id="detail-content-p3">
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">项目概述</span><span data-inline-lang="en">Project Overview</span></h3>
+        <div data-lang="zh">
+          <p>该项目聚焦工业日志场景下的单类异常检测任务，数据规模约 25 万条，具备高维特征、混合数据类型以及类别极度不平衡等典型挑战。</p>
+          <p>项目目标是在保证低误报的前提下提升异常识别精度，并建立可解释、可迁移的检测方法论，支持后续线上风控与监控策略迭代。</p>
+        </div>
+        <div data-lang="en">
+          <p>This project focused on one-class anomaly detection on industrial log data (about 250k records), with high dimensionality, mixed feature types, and extreme class imbalance.</p>
+          <p>The goal was to maximize precision under low false-positive constraints and build a practical, transferable detection methodology for production monitoring and risk control.</p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">技术方案与验证</span><span data-inline-lang="en">Approach & Validation</span></h3>
+        <div data-lang="zh">
+          <p><strong>四模型集成：</strong>构建并融合 RFOD、PCA、孤立森林与基于规则的检测器，兼顾统计稳健性、结构降维能力、树模型隔离能力与业务先验约束。</p>
+          <p><strong>关键方法论：</strong>提出“目标-上下文分离”原则，将核心异常目标特征与噪声时序上下文解耦，避免基于重构的模型被高噪声时序特征主导，提升检测稳定性。</p>
+          <p><strong>评估策略：</strong>在高度不平衡场景下使用平均精度（AP）作为核心指标，而非 ROC-AUC，确保评估结果更贴近真实业务中“抓到异常”的能力。</p>
+        </div>
+        <div data-lang="en">
+          <p><strong>Four-model ensemble:</strong> Integrated RFOD, PCA-based detector, Isolation Forest, and rule-based detection to combine statistical robustness, dimensional structure signals, isolation capability, and domain priors.</p>
+          <p><strong>Key principle:</strong> Introduced a "target-context separation" design to decouple core anomaly features from noisy temporal context, preventing reconstruction-based methods from being dominated by noise-heavy sequence features.</p>
+          <p><strong>Evaluation:</strong> Used Average Precision (AP), instead of ROC-AUC, as the primary metric to better reflect anomaly-capture quality under extreme class imbalance.</p>
+        </div>
+      </div>
+      <!-- <div class="detail-section">
+        <h3><span data-inline-lang="zh">可视化成果</span><span data-inline-lang="en">Visual Outputs</span></h3>
+        <div class="detail-media-grid">
+          <div class="media-block"><img src="./p3-1.jpg" alt=""></div>
+          <div class="media-block"><img src="./p3-2.jpg" alt=""></div>
+        </div>
+      </div> -->
+      <div class="detail-section">
+        <h3><span data-inline-lang="zh">结果与反思</span><span data-inline-lang="en">Results & Reflection</span></h3>
+        <div data-lang="zh">
+          <p>最终方案在高精准异常识别上取得了稳定结果，验证了多模型协同与评估口径选择对不平衡检测任务的决定性影响。</p>
+          <p>项目沉淀了可复用经验：第一，异常检测必须先定义业务目标与数据特征；第二，评估指标要与场景匹配；第三，面对混合日志数据时，规则与学习模型结合往往比单一模型更可靠。</p>
+        </div>
+        <div data-lang="en">
+          <p>The final system achieved consistently high-precision anomaly detection, confirming the value of model complementarity and metric selection in imbalanced settings.</p>
+          <p>Key takeaways: define business objectives and false-positive cost first, align metrics with scenario constraints, and combine rule logic with learned detectors for mixed log data rather than relying on a single model.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  填写你的项目内容 ↓
+// ════════════════════════════════════════════
+const projects = {
+  p1: {
+    cover: './p1-cover.jpg',
+    images: ['./random.jpg', './result.jpg'],
+    video: './dining_video.mp4',
+    tags_zh: ['AI 产品', '大模型', '0→1'],
+    tags_en: ['AI Product', 'LLM', '0→1'],
+    title_zh: '多模态大模型智能生活助手',
+    title_en: 'Multimodal AI Assistant for Daily Life',
+    meta_zh: '产品负责人 · 2026.3',
+    meta_en: 'Role: Product Lead · 2026.3',
+    overview_zh:  '<p>多人聚餐时，组织者需要在点菜前逐一确认每个人的饮食禁忌和口味偏好，过程繁琐且容易遗漏。现有的大众点评、美团等工具只解决"去哪吃"的问题，没有解决"这道菜我能不能吃、合不合适"的问题。主要对于经常组织多人聚餐的人，尤其是聚餐发起者。他们的核心诉求是在不熟悉菜单的陌生餐厅，快速筛选出所有人都能吃、且符合各自口味的菜品。</p><p>解决方案的核心逻辑是把"人的偏好"和"菜单信息"两个数据源交给 AI 做匹配，输出兼顾所有人需求的推荐结果。</p>',
+    overview_en:  '<p>When organizing group meals, organizers need to confirm each person\'s dietary restrictions and taste preferences one by one before ordering, which is time-consuming。Existing tools like Dineout and Meituan only solve the problem of "where to eat," not "whether I can eat this dish and whether it suits me." The main users are people who often organize group meals, especially the initiators. Their core requirement is to quickly filter out dishes that everyone can eat and meet everyone\'s preferences in unfamiliar restaurants without knowing the menu. The core solution is to give the "person\'s preference" and "menu information" two data sources to AI for matching, outputting a recommendation result that covers everyone\'s needs, replacing the process of manual filtering one by one.</p>',
+    challenge_zh: '<p>前端：使用 React Native + Expo 开发，一套代码同时支持 iOS 手机端和网页端。路由使用 Expo Router 的文件路由系统，本地数据存储使用 AsyncStorage，图片选择使用 expo-image-picker。</p><p>AI 后端：使用 Dify 平台搭建工作流，不是直接调用大模型 API，而是通过可视化工作流编排实现完整的推理链路。工作流内部分两个 LLM 节点：第一个节点使用通义千问VL（视觉语言模型）识别菜单图片，提取所有菜品名称列表；第二个节点使用 GPT-4o-mini 接收菜品列表和所有人的偏好信息，进行匹配分析并生成结构化的推荐结果。</p><p>数据流向：App 本地 → 读取本人偏好和已选好友的完整偏好信息 → 拼接成结构化文字 → 连同菜单图片一起发送给 Dify API → Dify 工作流处理 → 返回 Markdown 格式的推荐结果 → App 渲染展示。</p>',
+    challenge_en: '<p>Frontend: Developed with React Native + Expo, supporting both iOS mobile and web platforms with a single codebase. The routing system uses the file routing system of Expo Router, and local data storage uses AsyncStorage. The image selection uses expo-image-picker.</p><p>AI backend: Built on the Dify platform, not directly calling the API of the large model, but implementing a complete inference chain through visual workflow arrangement. The workflow contains two LLM nodes: the first node uses Tongyi QianwenVL (visual language model) to recognize the menu image, extract the list of all dish names; the second node uses GPT-4o-mini to receive the list of dishes and the complete preferences of all people, perform matching analysis and generate structured recommendation results.</p><p>Data flow: App local → read the complete preferences of myself and the selected friends → concatenate into structured text → send together with the menu image to the Dify API → Dify workflow processing → return Markdown format recommendation results → App rendering display.</p>',
+    solution_zh:  '<p>模块一：我的偏好 用户第一次进入 App 时设置自己的固定偏好，数据保存在本地，之后每次点餐自动带入，不需要重复填写。收集的信息包括：口味偏好（清淡/微辣/中辣/重辣）、饮食类型（无限制/素食/清真/低卡减脂）、过敏食材（海鲜/花生/坚果/乳制品）、不喜欢的食材（文字输入）、其他备注（文字输入）。</p><p>模块二：点餐 这是核心功能，分两个入口：入口一是「我要去餐厅吃」，流程分三步：第一步上传菜单图片（支持拍照或从相册选择）；第二步选择用餐人数，单人直接进入下一步，多人则可以从好友档案里勾选好友，也可以临时用文字输入同桌人偏好，两种方式可以同时使用；第三步点击开始推荐，AI 分析后输出推荐结果页，结果按强烈推荐、可以尝试、谨慎选择、建议回避四个等级分类展示，并附有具体理由和整体搭配建议。结果页底部有两个按钮，重新推荐会返回重新触发 AI 分析，结束推荐直接回到点餐主页。入口二是「不知道吃什么」，同样先选择用餐人数和同桌人，然后进入卡片滑动页面。页面会根据所有人的饮食禁忌过滤本地菜品数据库，把符合条件的菜品以卡片形式展示，左滑跳过换下一张，右滑收藏该菜品。页面底部有查看收藏的按钮，可以随时查看和删除已收藏的菜品。 </p><p>模块三：好友档案 可以添加、编辑、删除常用好友的饮食偏好。每位好友的信息结构和本人偏好一样，包括口味、饮食类型、过敏食材、不喜欢的食材和备注。好友信息保存在本地，点餐时可以直接勾选，不需要每次重新输入。 </p>',
+    solution_en:  '<p>The solution is to design a multi-modal AI assistant that can handle the complex and diverse needs of different users in a real-world dining scenario. The MVP is to design a user-friendly interface that can handle the complex and diverse needs of different users in a real-world dining scenario. The key tradeoffs are the design of the user-friendly interface and the design of the multi-modal AI assistant. The AI plays a role in the recommendation system.</p>',
+    results_zh:   '<p><strong>当前局限：</strong> 菜单识别依赖图片清晰度，模糊或光线不好的图片识别准确率会下降。本地菜品数据库是手动维护的静态文件，覆盖的菜品有限。随机推荐模块没有接入 AI，推荐结果不包含口味匹配分析，只做了禁忌过滤。用户数据存在本地，换设备后数据会丢失。</p><p>💡 <strong>近期可迭代方向：</strong>接入高德地图或大众点评开放 API，实现周边餐厅推荐，并自动获取已有菜单，省去手动拍照上传的步骤。扩充本地菜品数据库，并给随机推荐也接入 AI 分析，根据口味偏好而不只是禁忌来推荐。</p><p>💡 <strong>长期方向：</strong> 好友之间直接共享偏好档案，加好友后自动同步对方的饮食信息，不需要手动录入。加入历史点餐记录，根据过往数据持续优化个人偏好模型。</p>',
+    results_en:   '<p><strong>Current limitations:</strong> The menu recognition depends on the clarity of the image, and the recognition accuracy will decrease if the image is blurry or the lighting is poor. The local databaseis a static file manually maintained, and the coverage of the meal is limited. The random recommendation module does not integrate AI, and the recommendation result does not include口味匹配 analysis, only the禁忌过滤. The user data exists locally, and will be lost after switching devices.</p><p>💡 <strong>Recent iterative directions:</strong> Integrate the high-definition map or the public review and comment open API, realize the surrounding restaurant recommendation, and automatically obtain the existing menu, saving the step of manually taking pictures and uploading. Expand the local菜品 database, and give the random recommendation also integrate AI analysis, according to the口味偏好 rather than only the禁忌 to recommend.</p><p>💡 <strong>Long-term direction:</strong> The friends之间直接共享偏好档案，加好友后自动同步对方的饮食信息，不需要手动录入。加入历史点餐记录，根据过往数据持续优化个人偏好模型。</p>',
+  },
+  p2: {
+    cover: './df-edi-logo.png',
+    images: ['./p2-1.jpg', './p2-2.jpg'],
+    video: './p2-demo.mp4',
+    tags_zh: ['统计建模', '商业分析', '数据可视化'],
+    tags_en: ['Statistical Modeling', 'Business Analysis', 'Data Visualization'],
+    title_zh: '美国统计协会 数据分析竞赛',
+    title_en: 'ASA DataFest Competition',
+    meta_zh: '团队负责人 · 2024',
+    meta_en: 'Team Lead · 2024',
+    overview_zh:  '<p><strong>项目背景：</strong>在这里写项目二的业务场景、目标用户、核心问题和项目目标。</p><p><strong>你的角色：</strong>补充你在项目中的职责边界（例如需求定义、跨团队协作、上线推进等）。</p>',
+    overview_en:  '<p><strong>Project Context:</strong> Describe the scenario, target users, core pain points, and project goals for Project 2.</p><p><strong>Your Role:</strong> Clarify your ownership scope (for example: requirement definition, cross-team collaboration, and launch execution).</p>',
+    challenge_zh: '<p><strong>技术架构：</strong>说明项目技术栈、系统结构、关键依赖和数据流。</p><p><strong>核心挑战：</strong>写清性能、稳定性、数据质量、资源限制等真实问题，以及你如何拆解问题。</p>',
+    challenge_en: '<p><strong>Tech Framework:</strong> Explain the stack, system design, key dependencies, and data flow.</p><p><strong>Core Challenges:</strong> Describe real constraints such as performance, reliability, data quality, and resource limits, and how you broke them down.</p>',
+    solution_zh:  '<p><strong>方案设计：</strong>按阶段写你的方案（MVP 版本、迭代策略、关键取舍）。</p><p><strong>执行路径：</strong>说明你如何推进需求、验证效果，以及如何和研发/设计/业务协作。</p>',
+    solution_en:  '<p><strong>Solution Design:</strong> Describe your approach by phase (MVP, iteration plan, and key trade-offs).</p><p><strong>Execution Path:</strong> Explain how you drove delivery, validated outcomes, and collaborated with engineering/design/business teams.</p>',
+    results_zh:   '<p><strong>结果与影响：</strong>补充可量化指标（例如转化率、留存、时长、成本等）。</p><p><strong>复盘与下一步：</strong>总结经验、当前局限以及下一轮优化方向。</p>',
+    results_en:   '<p><strong>Results & Impact:</strong> Add measurable outcomes (for example: conversion, retention, time, cost, etc.).</p><p><strong>Retrospective & Next Steps:</strong> Summarize learnings, current limitations, and next optimization priorities.</p>',
+  },
+  p3: {
+    cover: './p3-cover.jpg',
+    images: ['./p3-1.jpg', './p3-2.jpg'],
+    video: './p3-demo.mp4',
+    tags_zh: ['数据分析', '机器学习', '团队合作'],
+    tags_en: ['Data Analysis', 'Machine Learning', 'Team Collaboration'],
+    title_zh: '网络安全日志异常检测',
+    title_en: 'Anomaly Detection for Network Security Logs',
+    meta_zh: '团队成员 · 2025',
+    meta_en: 'Team Member · 2026.3',
+    overview_zh:  '<p><strong>项目背景：</strong>在这里写项目三的增长目标、关键用户群和核心业务假设。</p><p><strong>项目定位：</strong>补充项目在整体产品中的位置，以及与其他模块的关系。</p>',
+    overview_en:  '<p><strong>Project Context:</strong> Describe the growth objective, key user segments, and core business hypothesis for Project 3.</p><p><strong>Positioning:</strong> Explain how this project fits into the overall product and connects with other modules.</p>',
+    challenge_zh: '<p><strong>技术架构：</strong>写清埋点、实验、归因、看板或算法等基础能力的设计。</p><p><strong>核心挑战：</strong>说明增长实验中的样本量、噪音、归因困难和实施成本等问题。</p>',
+    challenge_en: '<p><strong>Tech Framework:</strong> Describe the foundations such as tracking, experimentation, attribution, dashboards, or algorithm support.</p><p><strong>Core Challenges:</strong> Explain issues like sample size, noise, attribution uncertainty, and implementation cost in growth experiments.</p>',
+    solution_zh:  '<p><strong>方案设计：</strong>按“目标拆解 - 实验设计 - 落地执行”写清你的方法。</p><p><strong>关键动作：</strong>列出你主导的策略、A/B 实验和迭代节奏。</p>',
+    solution_en:  '<p><strong>Solution Design:</strong> Structure your approach as goal decomposition, experiment design, and rollout execution.</p><p><strong>Key Actions:</strong> List the strategies, A/B tests, and iteration cadence you led.</p>',
+    results_zh:   '<p><strong>结果与影响：</strong>填写核心增长指标变化，并注明观察周期和统计口径。</p><p><strong>复盘与下一步：</strong>说明哪些策略有效、哪些无效，以及下一阶段计划。</p>',
+    results_en:   '<p><strong>Results & Impact:</strong> Add key growth metric changes with the observation window and measurement definition.</p><p><strong>Retrospective & Next Steps:</strong> Explain what worked, what did not, and your next-phase plan.</p>',
+  },
+};
+
+// ════════════════════════════════════════════
+//  Language toggle
+// ════════════════════════════════════════════
+let currentLang = 'zh';
+let currentProjectId = null;
+
+function getProjectIdFromHash() {
+  const match = window.location.hash.match(/^#project\-(p\d+)$/);
+  return match ? match[1] : null;
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.body.className = lang;
+  document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  if (currentProjectId && document.getElementById('detail-page').classList.contains('open')) {
+    openProject(currentProjectId, { pushHistory: false });
+  }
+}
+
+// ════════════════════════════════════════════
+//  Project detail open / close
+// ════════════════════════════════════════════
+function openProject(id, options = {}) {
+  const { pushHistory = true } = options;
+  const p = projects[id]; if (!p) return;
+  currentProjectId = id;
+  const l = currentLang;
+  const tags = l === 'zh' ? (p.tags_zh || p.tags_en || []) : (p.tags_en || p.tags_zh || []);
+  document.getElementById('detail-tags').innerHTML = tags.map(t => `<span class="ptag">${t}</span>`).join('');
+  document.getElementById('detail-title').textContent  = l === 'zh' ? p.title_zh : p.title_en;
+  document.getElementById('detail-meta').textContent   = l === 'zh' ? p.meta_zh  : p.meta_en;
+
+  // Project-specific cover
+  const coverEl = document.getElementById('detail-cover-image');
+  if (p.cover) {
+    coverEl.src = p.cover;
+    coverEl.style.display = 'block';
+  } else {
+    coverEl.removeAttribute('src');
+    coverEl.style.display = 'none';
+  }
+
+  // Project-specific detail content block
+  document.querySelectorAll('.project-detail-content').forEach(el => el.classList.remove('active'));
+  const contentEl = document.getElementById(`detail-content-${id}`);
+  if (contentEl) contentEl.classList.add('active');
+
+  const dp = document.getElementById('detail-page');
+  dp.classList.add('open');
+  dp.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  if (pushHistory) {
+    const targetHash = `#project-${id}`;
+    if (window.location.hash !== targetHash) {
+      history.pushState({ projectId: id }, '', targetHash);
+    }
+  }
+}
+function closeProject(options = {}) {
+  const { fromHistory = false } = options;
+  document.getElementById('detail-page').classList.remove('open');
+  document.body.style.overflow = '';
+  currentProjectId = null;
+
+  if (!fromHistory && getProjectIdFromHash()) {
+    history.back();
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
+
+function goHome(event) {
+  if (event) event.preventDefault();
+  closeProject({ fromHistory: true });
+  history.replaceState(null, '', window.location.pathname);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('popstate', () => {
+  const projectId = getProjectIdFromHash();
+  if (projectId && projects[projectId]) {
+    openProject(projectId, { pushHistory: false });
+  } else {
+    closeProject({ fromHistory: true });
+  }
+});
+
+const initialProjectId = getProjectIdFromHash();
+if (initialProjectId && projects[initialProjectId]) {
+  openProject(initialProjectId, { pushHistory: false });
+}
+
+const emailAddress = 'cao_zhizhou@163.com';
+let copyToastTimer = null;
+
+function showCopyToast() {
+  const toast = document.getElementById('copy-toast');
+  if (!toast) return;
+  toast.classList.add('show');
+  if (copyToastTimer) clearTimeout(copyToastTimer);
+  copyToastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+async function copyEmailAddress() {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(emailAddress);
+    } else {
+      const input = document.createElement('textarea');
+      input.value = emailAddress;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.focus();
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    showCopyToast();
+  } catch (_) {
+    showCopyToast();
+  }
+}
+
+const copyEmailBtn = document.getElementById('copy-email-btn');
+if (copyEmailBtn) {
+  copyEmailBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    copyEmailAddress();
+  });
+}
+</script>
+</body>
+</html>
