@@ -368,7 +368,13 @@
     .hero-photo{order:-1;max-width:300px;margin:0 auto}
     .hero-tags{left:auto;right:-10px;bottom:-10px}
     .projects-grid{grid-template-columns:1fr 1fr}
-    nav{display:none}
+    nav{
+      display:flex;
+      top:72px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+    #hero{padding-top:120px}
     .detail-media-grid{grid-template-columns:1fr}
   }
   @media(max-width:600px){
@@ -377,6 +383,11 @@
     .projects-grid{grid-template-columns:1fr}
     h1{font-size:42px}
     .detail-content,.detail-hero-content{padding-left:20px;padding-right:20px}
+    .site-logo{top:14px;left:12px;font-size:16px;padding:8px 12px}
+    #lang-toggle{top:14px;right:12px}
+    #lang-toggle button{padding:6px 12px;font-size:12px}
+    nav{top:58px;padding:4px 6px}
+    nav a{padding:5px 10px;font-size:12px}
     .hero-photo{max-width:240px;margin:0 auto}
     .media-block{width:58%;max-width:180px}
   }
